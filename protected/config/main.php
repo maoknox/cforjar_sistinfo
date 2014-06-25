@@ -7,8 +7,9 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	'language'=>'es',
 	'name'=>'Centro Forjar',
-	'defaultController'=>'hola',
+	'defaultController'=>'site',
 
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -57,7 +58,7 @@ return array(
 		
 		'db'=>array(
  	       'tablePrefix'=>'',
- 	       'connectionString' => 'pgsql:host=localhost;port=5432;dbname=pruebayii',
+ 	       'connectionString' => 'pgsql:host=localhost;port=5432;dbname=cforjarv2',
  	       'username'=>'postgres',
  	       'password'=>'root',
  	       'charset'=>'UTF8',

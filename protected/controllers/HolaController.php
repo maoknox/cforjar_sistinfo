@@ -7,9 +7,15 @@
 			$this->render("index",array("saludo"=>$saludo));
 		}
 		
-		public function actionPrueba($id=null,$id=null){
-			$vars=array('var1'=>$id,'var2'=>$id1);
-			$this->render("prueba",$vars);
+		public function actionPrueba($id=null){
+			$formPr=new HolaForm();
+			if(isset($_POST["HolaForm"])){
+				$formPr->attributes=$_POST["HolaForm"];
+				if($formPr->validate()){
+					$this->redirect(array("prueba"));
+				}
+			}
+			$this->render("prueba",array('formPr'=>$formPr));
 		}
 	}
 

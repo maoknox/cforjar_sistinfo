@@ -1,5 +1,4 @@
 <?php
-
 /**
  * LoginForm class.
  * LoginForm is the data structure for keeping
@@ -7,10 +6,10 @@
  */
 class LoginForm extends CFormModel
 {
-	public $username;
-	public $password;
-	public $rememberMe;
-
+	public $nombreusuario;
+	public $claveusr;
+	//public $rememberMe;
+	public $cedulaUsr;
 	private $_identity;
 
 	/**
@@ -22,23 +21,21 @@ class LoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-			array('username, password', 'required'),
-			// rememberMe needs to be a boolean
-			array('rememberMe', 'boolean'),
+			array('nombreusuario, claveusr', 'required'),
 			// password needs to be authenticated
-			array('password', 'authenticate'),
+			array('claveusr', 'authenticate','claveusr'=>$this->claveusr),
 		);
 	}
 
 	/**
 	 * Declares attribute labels.
 	 */
-	public function attributeLabels()
+	/*public function attributeLabels()
 	{
 		return array(
 			'rememberMe'=>'Remember me next time',
 		);
-	}
+	}*/
 
 	/**
 	 * Authenticates the password.
@@ -48,9 +45,9 @@ class LoginForm extends CFormModel
 	{
 		if(!$this->hasErrors())
 		{
-			$this->_identity=new UserIdentity($this->username,$this->password);
+			$this->_identity=new UserIdentity($this->nombreusuario,$this->claveusr);
 			if(!$this->_identity->authenticate())
-				$this->addError('password','Incorrect username or password.');
+				$this->addError('claveusr','Nombre o clave de usuario incorrecta.');
 		}
 	}
 
@@ -62,13 +59,15 @@ class LoginForm extends CFormModel
 	{
 		if($this->_identity===null)
 		{
-			$this->_identity=new UserIdentity($this->username,$this->password);
+			$this->_identity=new UserIdentity($this->nombreusuario,$this->claveusr);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
-		{
-			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+		{	
+			//Yii::app()->getSession()->add('cedula',$this->_identity->cedula);
+			$duration=30; // 30 segs
 			Yii::app()->user->login($this->_identity,$duration);
+			
 			return true;
 		}
 		else

@@ -15,19 +15,28 @@ class UserIdentity extends CUserIdentity
 	 * against some persistent user identity storage (e.g. database).
 	 * @return boolean whether authentication succeeds.
 	 */
+	 private $cedulaUsr;
+	 
 	public function authenticate()
 	{
-		$users=array(
-			// username => password
-			'demo'=>'demo',
-			'admin'=>'admin',
-		);
-		if(!isset($users[$this->username]))
+		//$usuario=Personal::model()->find('nombreusuario=?',array($this->username));
+		$persona=new Persona($this->username);
+		if($persona->consultaUsuario()===false)
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
-		elseif($users[$this->username]!==$this->password)
+		elseif($this->password!==$persona->_clave)
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
-		else
+		else{
 			$this->errorCode=self::ERROR_NONE;
+			$this->setState('cedula',$persona->_cedula);
+			$this->cedulaUsr=$persona->_cedula;
+			$this->setState('rol',$persona->_id_rol,'');
+			$this->setState('nombre',$persona->_nombre_profes.' '.$persona->_apellido_prof);
+			//Yii::app()->getSession()->add('cedula',$cedula);
+		}
 		return !$this->errorCode;
 	}
+	public function getId()
+    {
+        return $this->cedulaUsr;
+    }
 }

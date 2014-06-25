@@ -1,10 +1,15 @@
 <?php
 
-class SiteController extends Controller
+class SiteController extends Controller 
 {
 	/**
 	 * Declares class-based actions.
 	 */
+	 
+	 public function actionPrincipal(){
+		 
+	}
+	 
 	public function actions()
 	{
 		return array(
@@ -91,11 +96,13 @@ class SiteController extends Controller
 		{
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
+			if($model->validate() && $model->login()){				
+				Yii::app()->user->returnUrl = array("controlAp/index"); 
 				$this->redirect(Yii::app()->user->returnUrl);
+			}
 		}
 		// display the login form
-		$this->render('prueba',array('model'=>$model));
+		$this->render('login',array('model'=>$model));
 	}
 
 	/**
@@ -104,6 +111,7 @@ class SiteController extends Controller
 	public function actionLogout()
 	{
 		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->homeUrl);
+		//$this->redirect(Yii::app()->homeUrl);
+		$this->redirect(array("hola/prueba"));
 	}
 }

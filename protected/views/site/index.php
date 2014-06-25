@@ -2,19 +2,48 @@
 /* @var $this SiteController */
 
 $this->pageTitle=Yii::app()->name;
-?>
+Yii::app()->getClientScript()->registerScript('myscript','$("#chk_just").keyup(function() {
+alert(\'Hello world !\');
+});');
 
-<h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
 
-<p>Congratulations! You have successfully created your Yii application.</p>
+/*echo CHtml::beginForm(); ?>
+ 
+    <?php echo CHtml::errorSummary(array($a,$b)); ?>
+ 
+    <!-- ...input fields for $a, $b... -->
+ 
+    <div class="row">
+        <?php echo $form->labelEx($a,'a_field'); ?>
+        <?php echo $form->textField($a,'a_field'); ?>
+        <?php echo $form->error($a,'a_field'); ?>
+    </div>
+ 
+    <div class="row">
+        <?php echo $form->labelEx($b,'b_field'); ?>
+        <?php echo $form->textField($b,'b_field'); ?>
+        <?php echo $form->error($b,'b_field'); ?>
+    </div>
+ 
+ 
+<?php echo CHtml::endForm(); ?>
+*/?>
+<?php if(Yii::app()->user->hasState('cedula')){
+	echo $modulo;
+}
+echo Yii::app()->user->getState('role');
+/*$this->widget('zii.widgets.jui.CJuiTabs',array(
+	    'tabs'=>array(
+	        'StaticTab '=>'Content for tab 1',
+	        'StaticTab With ID'=>array('content'=>'Content for tab 2 With Id' , 'id'=>'tab2'),
+	        'AjaxTab'=>array('ajax'=>$this->createUrl('hola/prueba')),
+	    ),
+	    // additional javascript options for the tabs plugin
+	    'options'=>array(
+	        'collapsible'=>true,
+	    ),
+	    'id'=>'MyTab-Menu',
+	));
+*/?>
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <code><?php echo __FILE__; ?></code></li>
-	<li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
 
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>
