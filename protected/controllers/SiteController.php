@@ -23,6 +23,9 @@ class SiteController extends Controller
 			'page'=>array(
 				'class'=>'CViewAction',
 			),
+			'quote'=>array(
+                'class'=>'CWebServiceAction',
+            ),
 		);
 	}
 
@@ -76,14 +79,57 @@ class SiteController extends Controller
 		}
 		$this->render('contact',array('model'=>$model));
 	}
+	
+	public function actionLoginExt(){
+/*		define('SDIS_WS_LOGIN', 'http://aplicativos.sdis.gov.co/login_sdis');
+		try {
+            $config = new stdClass();
+            $config->apiKey = $_GET["apiKey"];
+            $cliente = new SoapClient(SDIS_WS_LOGIN . '/service/', array("trace" => 1, "exception" => 0));
+            $header = new SoapHeader(SDIS_WS_LOGIN . '/service/', "MyHeader", $config, false);
+            $response = json_decode($cliente->__soapCall("login", array(1), NULL, $header));
+            if (!$response->error) {
+                if (is_array($response->permisos) && count($response->permisos) > 0) {
+                 	$model=new LoginForm;
+					$respuesta=(object)$response;
+*/					//echo $respuesta->usuario->Login;
+					//$respuesta->usuario->Login="erika";
+					//$model->nombreusuario=$respuesta->usuario->Login;					
+					 //print_r($response);
+					// if it is ajax validation request
+					
+			
+					// collect user input data
+						$model=new LoginForm;
+						//$model->attributes=$_POST['LoginForm'];
+						$respuesta->usuario->Login="erika.zamudio";
+						$model->nombreusuario=$respuesta->usuario->Login;	
+						$model->claveusr="1234";
+						// validate user input and redirect to the previous page if valid
+						if($model->validate() && $model->login()){				
+							Yii::app()->user->returnUrl = array("controlAp/index"); 
+							$this->redirect(Yii::app()->user->returnUrl);
+						}
+					// display the login form
+					//$key=$_GET["apiKey"];
+					//$config = new stdClass();
+					//$config->apiKey = $_GET["apiKey"];
+					$this->render('login',array('model'=>$model,'respuesta'=>$respuesta)); 
+/*                }
+            }
+        } catch (Exception $e) {
+            echo "Ha ocurrido un error en el login [" . $e->getMessage() . "]";
+        }						
+*/			
+	}
+
 
 	/**
 	 * Displays the login page
 	 */
-	public function actionLogin()
-	{
+	public function actionLogin(){
+		//print_r(Yii::app()->input->post());
 		$model=new LoginForm;
-
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
@@ -96,22 +142,84 @@ class SiteController extends Controller
 		{
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login()){				
+			if($model->validate() && $model->login()){
+				if (isset($_SERVER)) {
+					if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+						$ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
+					if (isset($_SERVER["HTTP_CLIENT_IP"]))
+						$ip=$_SERVER["HTTP_CLIENT_IP"];
+					$ip=$_SERVER["REMOTE_ADDR"];
+				}
+				else{
+					if (getenv('HTTP_X_FORWARDED_FOR'))
+						$ip=getenv('HTTP_X_FORWARDED_FOR');
+					if (getenv('HTTP_CLIENT_IP'))
+						$ip=getenv('HTTP_CLIENT_IP');
+					$ip=getenv('REMOTE_ADDR');
+				}
+				$modeloLogAcceso=new LogAcceso();
+				$modeloLogAcceso->ip_acceso=$ip;
+				$modeloLogAcceso->id_tipoacceso=1;
+				$modeloLogAcceso->fecha_logacceso=date("Y-m-d H:i:s");
+				$modeloLogAcceso->id_cedula=Yii::app()->user->getState('cedula');								
+				$modeloLogAcceso->registraAcceso();
 				Yii::app()->user->returnUrl = array("controlAp/index"); 
-				$this->redirect(Yii::app()->user->returnUrl);
+				//$this->redirect(Yii::app()->user->returnUrl);
+				/*Yii::import('application.extensions.yii-mail-master.YiiMailMessage');
+				 $message = new YiiMailMessage;
+				 $message->setBody('<h1><strong>Message content here with HTML</strong></h1>', 'text');
+				 $message->subject = 'My Subject';
+				 $message->addTo('femauro@gmail.com');
+				 $message->from = Yii::app()->params['adminEmail'];
+				 Yii::app()->mail->send($message);*/
+				
 			}
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));
 	}
-
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */
+	 
+	public function actionSalir(){
+		
+		$this->render('salida'); 
+	}
 	public function actionLogout()
 	{
+		if (isset($_SERVER)) {
+			if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+				$ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
+			if (isset($_SERVER["HTTP_CLIENT_IP"]))
+				$ip=$_SERVER["HTTP_CLIENT_IP"];
+			$ip=$_SERVER["REMOTE_ADDR"];
+		}
+		else{
+			if (getenv('HTTP_X_FORWARDED_FOR'))
+				$ip=getenv('HTTP_X_FORWARDED_FOR');
+			if (getenv('HTTP_CLIENT_IP'))
+				$ip=getenv('HTTP_CLIENT_IP');
+			$ip=getenv('REMOTE_ADDR');
+		}
+		$modeloLogAcceso=new LogAcceso();
+		$modeloLogAcceso->ip_acceso=$ip;
+		$modeloLogAcceso->id_tipoacceso=2;
+		$modeloLogAcceso->fecha_logacceso=date("Y-m-d H:i:s");
+		$modeloLogAcceso->id_cedula=Yii::app()->user->getState('cedula');								
+		$modeloLogAcceso->registraAcceso();	
 		Yii::app()->user->logout();
 		//$this->redirect(Yii::app()->homeUrl);
-		$this->redirect(array("hola/prueba"));
+		$this->redirect(array("site/salir"));
+	}
+	
+	public function actionSearch(){
+		//$criterio=$_POST[" echo $_POST["search_term"];"];
+		 echo "blaa</br>";
+		 echo "blaa</br>";
+		 echo "blaa</br>";
+	}
+	public function actionConfirmaAlertas(){
+		echo CJSON::encode(array("alertaMenu"=>"glyphicon glyphicon-ok",'resultado'=>CJavaScript::encode(CJavaScript::quote($modeloValPsicol->msnValPsicol)),'idcasodelito'=>CHtml::encode($modeloValPsicol->idCasoDelito)));
 	}
 }

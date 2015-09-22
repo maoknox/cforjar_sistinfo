@@ -1,4 +1,4 @@
-<?
+<?php
 class CalculadoraForm extends CFormModel{  
 	public $operando1;  
     public $operando2;  

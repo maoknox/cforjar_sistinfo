@@ -1,14 +1,14 @@
 .ddsmoothmenu{
-font: bold 12px Verdana;
-background: #414141; /*background of menu bar (default state)*/
+font: 14px Arial;
+background: #831F47; /*background of menu bar (default state)*/
 width: 100%;
 }
 
 .ddsmoothmenu ul{
-z-index:100;
 margin: 0;
 padding: 0;
 list-style-type: none;
+background:#006
 }
 
 /*Top level list items*/
@@ -21,7 +21,7 @@ float: left;
 /*Top level menu link items style*/
 .ddsmoothmenu ul li a{
 display: block;
-background: #414141; /*background of menu items (default state)*/
+background: #831F47; /*background of menu items (default state)*/
 color: white;
 padding: 8px 10px;
 border-right: 1px solid #778;
@@ -38,13 +38,13 @@ color: white;
 }
 
 .ddsmoothmenu ul li a.selected{ /*CSS class that's dynamically added to the currently active menu items' LI A element*/
-background: black; 
-color: white;
+background: #E7E7E7; 
+color: black;
 }
 
 .ddsmoothmenu ul li a:hover{
-background: black; /*background of menu items during onmouseover (hover state)*/
-color: white;
+background: #E7E7E7; /*background of menu items during onmouseover (hover state)*/
+color: black;
 }
 	
 /*1st sub level menu*/
@@ -58,18 +58,21 @@ visibility: hidden;
 /*Sub level menu list items (undo style from Top level List Items)*/
 .ddsmoothmenu ul li ul li{
 display: list-item;
-float: none;
+float: left;
 }
 
 /*All subsequent sub menu levels vertical offset after 1st level sub menu */
 .ddsmoothmenu ul li ul li ul{
 top: 0;
+display: list-item;
+float: left;
+z-index:100;
 }
 
 /* Sub level menu links style */
 .ddsmoothmenu ul li ul li a{
 font: normal 13px Verdana;
-width: 160px; /*width of sub menus*/
+width: 170px; /*width of sub menus*/
 padding: 5px;
 margin: 0;
 border-top-width: 0;
@@ -103,8 +106,9 @@ top: 0;
 width: 0;
 height: 0;
 background: silver;
+z-index:0
 }
 
 .toplevelshadow{ /*shadow opacity for NON CSS3 capable browsers. Doesn't work in IE*/
-opacity: 0.8;
+opacity: 0;
 }

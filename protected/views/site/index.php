@@ -1,11 +1,11 @@
 <?php
-/* @var $this SiteController */
+/* @var $this SiteController 
 
 $this->pageTitle=Yii::app()->name;
 Yii::app()->getClientScript()->registerScript('myscript','$("#chk_just").keyup(function() {
 alert(\'Hello world !\');
 });');
-
+*/
 
 /*echo CHtml::beginForm(); ?>
  
@@ -28,11 +28,11 @@ alert(\'Hello world !\');
  
 <?php echo CHtml::endForm(); ?>
 */?>
-<?php if(Yii::app()->user->hasState('cedula')){
+<?php /*if(Yii::app()->user->hasState('cedula')){
 	echo $modulo;
 }
 echo Yii::app()->user->getState('role');
-/*$this->widget('zii.widgets.jui.CJuiTabs',array(
+$this->widget('zii.widgets.jui.CJuiTabs',array(
 	    'tabs'=>array(
 	        'StaticTab '=>'Content for tab 1',
 	        'StaticTab With ID'=>array('content'=>'Content for tab 2 With Id' , 'id'=>'tab2'),
